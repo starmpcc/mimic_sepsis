@@ -44,16 +44,14 @@ The original cohort from the 2018 Nature Medicine publication was built using MI
 """
 
 import argparse
-import pyprind
 
 import numpy as np
 import pandas as pd
-
-from scipy.spatial.distance import cdist
-from scipy.interpolate import interp1d
-from scipy import stats
-
+import pyprind
 from fancyimpute import KNN
+from scipy import stats
+from scipy.interpolate import interp1d
+from scipy.spatial.distance import cdist
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--process_raw", action='store_true', help="If specified, additionally save trajectories without normalized features")
@@ -1579,8 +1577,7 @@ s6=np.array([s[:,6]<1.2, (s[:,6 ]>=1.2) & (s[:, 6]<2), (s[:, 6]>=2) & (s[:, 6]<3
 num_columns = reformat4t.shape[1]   # Number of variables in data
 newcols_reformat4 = np.zeros((reformat4t.shape[0],7))
 for i in range(reformat4t.shape[0]): 
-    t = max(p[s1[:,i]], default=0) + max(p[s2[:,i]], default=0) + max(p[s3[:,i]], default=0) + max(p[s4[:,i]], default=0) 
-        + max(p[s5[:,i]], default=0) + max(p[s6[:,i]], default=0)  #SUM OF ALL 6 CRITERIA
+    t = max(p[s1[:,i]], default=0) + max(p[s2[:,i]], default=0) + max(p[s3[:,i]], default=0) + max(p[s4[:,i]], default=0) + max(p[s5[:,i]], default=0) + max(p[s6[:,i]], default=0)  #SUM OF ALL 6 CRITERIA
     if t > 0:
         newcols_reformat4[i,:] = [max(p[s1[:,i]], default=0), max(p[s2[:,i]], default=0), max(p[s3[:,i]], default=0), 
             max(p[s4[:,i]], default=0), max(p[s5[:,i]], default=0), max(p[s6[:,i]], default=0), t]
@@ -1615,13 +1612,13 @@ if pargs.save_intermediate:
 colmeta = ['presumed_onset', 'charttime', 'icustayid']  # Meta-data around patient stay
 colbin = ['gender', 'mechvent', 'max_dose_vaso', 're_admission']  # Binary features
 # Patient features that will be z-normalize
-colnorm = ['age', 'Weight_kg', 'GCS', 'HR', 'SysBP', 'MeanBP', 'DiaBP', 'RR', 'Temp_C', 'FiO2_1',\ 
-        'Potassium', 'Sodium', 'Chloride', 'Glucose', 'Magnesium', 'Calcium', 'Hb', \
-        'WBC_count', 'Platelets_count', 'PTT', 'PT', 'Arterial_pH', 'paO2', 'paCO2',\
-        'Arterial_BE', 'HCO3', 'Arterial_lactate', 'SOFA', 'SIRS', 'Shock_Index',\
+colnorm = ['age', 'Weight_kg', 'GCS', 'HR', 'SysBP', 'MeanBP', 'DiaBP', 'RR', 'Temp_C', 'FiO2_1', 
+        'Potassium', 'Sodium', 'Chloride', 'Glucose', 'Magnesium', 'Calcium', 'Hb', 
+        'WBC_count', 'Platelets_count', 'PTT', 'PT', 'Arterial_pH', 'paO2', 'paCO2',
+        'Arterial_BE', 'HCO3', 'Arterial_lactate', 'SOFA', 'SIRS', 'Shock_Index',
         'PaO2_FiO2', 'cumulated_balance']
 # Patient features that will be log-normalized
-collog=['SpO2', 'BUN', 'Creatinine', 'SGOT', 'SGPT', 'Total_bili', 'INR',\ 
+collog=['SpO2', 'BUN', 'Creatinine', 'SGOT', 'SGPT', 'Total_bili', 'INR',
         'input_total', 'input_4hourly', 'output_total', 'output_4hourly']
 
 # find patients who died in ICU during data collection period
